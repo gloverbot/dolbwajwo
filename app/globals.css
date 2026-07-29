@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    /* 기준 글자 크기를 키웁니다. 야간·저조도에서도 편하게 읽히도록. */
+    font-size: 17px;
+  }
+
+  body {
+    @apply bg-cream text-cocoa antialiased;
+    /* 숫자가 세로로 가지런히 보이도록 */
+    font-feature-settings: "tnum";
+  }
+
+  /* 키보드로 이동할 때 어디에 있는지 또렷하게 보이도록 */
+  :focus-visible {
+    @apply outline-none ring-4 ring-brand-mid/50;
+  }
+
+  /* 구글 Material Symbols(Rounded) 아이콘 기본 설정 */
+  .material-symbols-rounded {
+    font-family: "Material Symbols Rounded";
+    font-weight: normal;
+    font-style: normal;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: "liga";
+    -webkit-font-smoothing: antialiased;
+    user-select: none;
+    /* FILL 0 = 선으로만 그린 모양 */
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+  }
+
+  /* 속이 꽉 찬 모양 (선택된 탭 등에 씁니다) */
+  .icon-filled {
+    font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+  }
+}
+
+/* 여러 화면에서 반복해서 쓰는 모양들을 이름으로 정해둡니다. */
+@layer components {
+  /* ── 버튼 ────────────────────────────────────────────────────────────────
+     모서리를 완전히 굴린 '알약' 모양입니다. 부드럽고 누르기 쉬워 보이도록.
+     버튼 색 = 그 버튼을 눌렀을 때 만들어지는 '상태'의 색.               */
+
+  .btn-base {
+    @apply block w-full rounded-full px-6 py-5 text-center text-xl font-bold
+           shadow-soft transition active:scale-[0.99] disabled:cursor-not-allowed
+           disabled:shadow-none;
+  }
+
+  /* 메인 색 - 가장 중요한 행동 (시작하기, 아이 맡기기) */
+  .btn-primary {
+    @apply btn-base bg-brand text-white disabled:bg-sand disabled:text-muted;
+  }
+
+  /* 파랑 - 수락하기 (상태가 '수락 완료'로 바뀜) */
+  .btn-sky {
+    @apply btn-base bg-sky text-white disabled:bg-sand disabled:text-muted;
+  }
+
+  /* 초록 - 돌봄 끝내기 (상태가 '돌봄 끝'으로 바뀜) */
+  .btn-leaf {
+    @apply btn-base bg-leaf text-white disabled:bg-sand disabled:text-muted;
+  }
+
+  /* 테두리만 있는 보조 버튼 */
+  .btn-outline {
+    @apply btn-base border-2 border-brand-mid bg-white py-4 text-lg text-brand-dark shadow-none;
+  }
+
+  /* 취소처럼 조심해야 하는 버튼 */
+  .btn-quiet {
+    @apply btn-base border-2 border-sand bg-white py-4 text-lg text-clay-dark shadow-none;
+  }
+
+  /* 밑줄 없는 조용한 글씨 버튼 (둘러보기 같은 것) */
+  .btn-text {
+    @apply block w-full py-3 text-center text-lg font-bold text-mocha;
+  }
+
+  /* ── 상자 ──────────────────────────────────────────────────────────────── */
+  .card {
+    @apply rounded-3xl border border-sand bg-white p-5 shadow-soft;
+  }
+
+  /* ── 입력 ──────────────────────────────────────────────────────────────── */
+  .input-box {
+    @apply w-full rounded-2xl border-2 border-sand bg-white px-5 py-4 text-lg
+           text-cocoa outline-none placeholder:text-muted focus:border-brand-mid;
+  }
+
+  .label-text {
+    @apply mb-2 block text-lg font-bold text-cocoa;
+  }
+
+  /* 여러 개 중 하나 고르는 알약 버튼 */
+  .pick {
+    @apply rounded-full border-2 border-sand bg-white px-5 py-3 text-lg font-bold
+           text-mocha transition;
+  }
+  .pick-on {
+    @apply border-brand bg-brand text-white shadow-soft;
+  }
+}

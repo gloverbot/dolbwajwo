@@ -1,0 +1,25 @@
+# Node / Next.js
+node_modules/
+.next/
+out/
+build/
+next-env.d.ts
+*.tsbuildinfo
+
+# 비밀 키는 절대 올리지 않습니다
+.env
+.env.local
+.env*.local
+
+# Vercel
+.vercel
+
+# Flutter 프로토타입
+flutter_prototype/.dart_tool/
+flutter_prototype/build/
+flutter_prototype/pubspec.lock
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store

@@ -1,0 +1,19 @@
+name: dolbwajwo
+description: "돌봐줘 - 같은 동네·같은 어린이집 부모끼리 아이를 잠깐 맡기고 돌봐주는 앱 (프로토타입)"
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true

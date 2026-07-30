@@ -31,6 +31,19 @@ export function durationCash(minutes: number): number {
   return found ? found.cash : Math.round(minutes / 30) * 1500;
 }
 
+/**
+ * 비밀번호 최소 길이입니다.
+ *
+ * 이 숫자는 우리가 정한 게 아니라 **Supabase가 정한 규칙**입니다.
+ * 6자보다 짧으면 Supabase가 가입을 거절합니다.
+ *   → "Password should be at least 6 characters."
+ *
+ * 그래서 화면 안내와 검사를 여기 한 곳에서만 관리합니다.
+ * (예전엔 안내는 '4자', 검사도 '4자'였는데 서버는 6자를 요구해서
+ *  4~5자를 넣으면 가입 버튼을 누른 뒤에야 오류가 나왔습니다.)
+ */
+export const MIN_PASSWORD = 6;
+
 /** 광고 1편을 보면 주는 캐시 */
 export const AD_REWARD = 300;
 

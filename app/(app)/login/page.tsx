@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRef, useState } from "react";
 
 import { setVideoUrl, useApp } from "@/components/AppProvider";
@@ -9,6 +10,7 @@ import { Avatar, SafetyNotice } from "@/components/Ui";
 import { formatCash, makeId } from "@/lib/format";
 import {
   DAYCARES,
+  MIN_PASSWORD,
   NEIGHBORHOODS,
   PERSONALITY_TAGS,
   SKILL_TAGS,
@@ -133,6 +135,10 @@ function Intro({
             로그인하러 가기
           </button>
         )}
+        {/* 넓은 화면용 소개 홈페이지로 가는 길 */}
+        <Link href="/intro" className="btn-text -mt-2 text-brand-dark">
+          서비스 소개 홈페이지 보기
+        </Link>
       </div>
 
       {/* 지금 몇 번째 장인지 알려주는 점 */}
@@ -301,8 +307,8 @@ function SignUpForm() {
   async function handleSignUp() {
     if (!name.trim()) return setError("이름을 적어주세요.");
     if (!loginId.trim()) return setError("아이디를 적어주세요.");
-    if (password.length < 4)
-      return setError("비밀번호는 4자 이상으로 적어주세요.");
+    if (password.length < MIN_PASSWORD)
+      return setError(`비밀번호는 ${MIN_PASSWORD}자 이상으로 적어주세요.`);
     if (personality.length === 0) return setError("성격을 하나 이상 적어주세요.");
     if (skills.length === 0) return setError("잘하는 것을 하나 이상 적어주세요.");
     if (!neighborhood.trim()) return setError("우리 동네를 적어주세요.");
@@ -509,25 +515,31 @@ function SignUpForm() {
       />
 
       <label className="label-text mt-5" htmlFor="signupPw">
-        비밀번호 (4자 이상)
+        비밀번호 ({MIN_PASSWORD}자 이상)
       </label>
       <input
         id="signupPw"
         type="password"
         className="input-box"
-        placeholder="비밀번호"
+        placeholder={`${MIN_PASSWORD}자 이상`}
         value={password}
         onChange={(e) => {
           setPassword(e.target.value);
           setError("");
         }}
       />
+      {/* 다 적기 전에도 몇 자 남았는지 바로 알려줍니다 */}
+      {password.length > 0 && password.length < MIN_PASSWORD && (
+        <p className="mt-2 text-base font-bold text-clay-dark">
+          {MIN_PASSWORD - password.length}자만 더 적어주세요.
+        </p>
+      )}
 
-      <div className="mt-3 flex gap-2 rounded-2xl bg-clay-soft p-3">
-        <Icon name="warning" filled className="shrink-0 text-xl text-clay" />
-        <p className="text-base leading-relaxed text-clay-dark">
-          이 앱은 서버가 없는 프로토타입이라 비밀번호가 이 브라우저에 그대로
-          저장됩니다. <b>실제로 쓰는 비밀번호는 넣지 마세요.</b>
+      <div className="mt-3 flex gap-2 rounded-2xl bg-sky-soft p-3">
+        <Icon name="lock" filled className="shrink-0 text-xl text-sky" />
+        <p className="text-base leading-relaxed text-sky-dark">
+          비밀번호는 Supabase가 암호화해서 보관합니다. 앱에는 저장되지 않아요.
+          그래도 <b>다른 곳에서 쓰는 비밀번호는 넣지 마세요.</b>
         </p>
       </div>
 

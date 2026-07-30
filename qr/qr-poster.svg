@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="1060" viewBox="0 0 760 1060" font-family="Pretendard Variable, Pretendard, Apple SD Gothic Neo, Malgun Gothic, sans-serif">
+  <rect width="760" height="1060" rx="56" fill="#FDF8F1"/>
+  <rect x="14" y="14" width="732" height="1032" rx="44" fill="none" stroke="#D96E3C" stroke-width="3" stroke-opacity="0.35"/>
+
+  <!-- 로고: 지붕 + 하트 + 어른과 아이 -->
+  <g transform="translate(332 74) scale(0.99)">
+    <path d="M13 45 L48 15 L83 45" fill="none" stroke="#D96E3C" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M48 31c-2.6-3.4-8-2.6-8 1.8 0 3.6 4.6 6.4 8 8.8 3.4-2.4 8-5.2 8-8.8 0-4.4-5.4-5.2-8-1.8z" fill="#D96E3C"/>
+    <circle cx="34" cy="58" r="8.5" fill="#F0A882"/>
+    <path d="M21 83c0-7.2 5.8-13 13-13s13 5.8 13 13z" fill="#F0A882"/>
+    <circle cx="60" cy="63" r="6.5" fill="#9CBF9E"/>
+    <path d="M50 83c0-5.5 4.5-10 10-10s10 4.5 10 10z" fill="#9CBF9E"/>
+  </g>
+
+  <text x="380" y="228" text-anchor="middle" font-size="78" font-weight="700" fill="#4A3A2E" letter-spacing="-2">돌봐줘</text>
+  <text x="380" y="286" text-anchor="middle" font-size="30" font-weight="600" fill="#7A6A5C">같은 동네 부모끼리, 아이 돌봄</text>
+
+  <!-- QR 흰 판 -->
+  <rect x="130" y="336" width="500" height="500" rx="40" fill="#FFFFFF"/>
+  <svg x="150" y="356" width="460" height="460" viewBox="0 0 41 41"><path fill="#FFFFFF" d="M0 0h41v41H0z"/><path stroke="#4A3A2E" d="M2 2.5h7m4 0h1m1 0h1m1 0h4m1 0h4m1 0h2m3 0h7M2 3.5h1m5 0h1m2 0h1m3 0h1m4 0h1m2 0h1m1 0h1m4 0h1m1 0h1m5 0h1M2 4.5h1m1 0h3m1 0h1m1 0h1m1 0h1m2 0h1m2 0h1m6 0h1m1 0h1m1 0h1m2 0h1m1 0h3m1 0h1M2 5.5h1m1 0h3m1 0h1m1 0h2m4 0h1m3 0h1m1 0h2m1 0h1m1 0h1m1 0h2m1 0h1m1 0h3m1 0h1M2 6.5h1m1 0h3m1 0h1m2 0h2m1 0h2m1 0h1m1 0h2m6 0h2m3 0h1m1 0h3m1 0h1M2 7.5h1m5 0h1m3 0h3m1 0h1m2 0h4m1 0h1m1 0h3m3 0h1m5 0h1M2 8.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M12 9.5h1m2 0h2m1 0h2m2 0h1m1 0h1m1 0h1m1 0h3M5 10.5h2m1 0h2m2 0h1m2 0h4m2 0h1m2 0h5m6 0h2M4 11.5h1m2 0h1m3 0h2m6 0h4m1 0h1m1 0h3m1 0h2m1 0h3M2 12.5h1m1 0h1m3 0h2m3 0h3m2 0h1m1 0h2m1 0h3m1 0h1m1 0h4m1 0h2m2 0h1M2 13.5h1m1 0h1m5 0h1m1 0h1m1 0h1m1 0h1m2 0h1m8 0h1m1 0h3m3 0h2M3 14.5h1m1 0h2m1 0h2m1 0h1m1 0h1m3 0h4m1 0h1m3 0h1m2 0h1m2 0h1m2 0h1m1 0h2M2 15.5h1m1 0h4m2 0h1m3 0h2m3 0h2m5 0h6m2 0h1m1 0h1M2 16.5h7m1 0h1m5 0h2m5 0h1m3 0h4m4 0h4M4 17.5h1m5 0h1m1 0h3m3 0h4m1 0h4m1 0h2m3 0h4m1 0h1M2 18.5h1m2 0h4m2 0h4m2 0h2m1 0h2m2 0h2m1 0h1m4 0h1m3 0h1M2 19.5h3m1 0h1m2 0h1m1 0h1m1 0h1m1 0h2m3 0h2m3 0h1m3 0h2m2 0h1m2 0h2M4 20.5h3m1 0h1m1 0h4m1 0h2m3 0h2m5 0h1m1 0h1m1 0h2m1 0h2m2 0h1M3 21.5h5m2 0h2m1 0h2m1 0h5m1 0h1m4 0h1m1 0h3m1 0h3M2 22.5h1m3 0h1m1 0h1m1 0h1m2 0h3m1 0h2m2 0h3m1 0h2m1 0h1m1 0h3m1 0h1m2 0h2M2 23.5h1m2 0h1m1 0h1m1 0h5m2 0h1m1 0h1m1 0h1m8 0h2m2 0h3M6 24.5h1m1 0h2m1 0h1m3 0h1m1 0h1m1 0h1m1 0h4m3 0h2m1 0h2m1 0h2m2 0h1M5 25.5h2m2 0h1m3 0h1m5 0h1m1 0h2m3 0h1m1 0h6m1 0h2m1 0h1M2 26.5h3m3 0h1m4 0h2m1 0h2m2 0h6m1 0h2m1 0h3m2 0h1m2 0h1M2 27.5h4m1 0h1m4 0h1m1 0h2m1 0h1m1 0h1m1 0h1m1 0h1m2 0h2m2 0h1m1 0h1m1 0h3M2 28.5h3m3 0h2m2 0h1m1 0h1m2 0h1m1 0h1m1 0h3m3 0h2m1 0h1m1 0h1m2 0h1m1 0h2M2 29.5h1m1 0h1m1 0h2m1 0h3m3 0h1m2 0h1m1 0h1m2 0h1m2 0h1m1 0h2m1 0h1m2 0h5M2 30.5h1m1 0h3m1 0h1m1 0h1m2 0h2m7 0h1m2 0h3m2 0h7m1 0h1M10 31.5h3m1 0h1m1 0h1m2 0h1m2 0h3m2 0h1m2 0h1m3 0h4M2 32.5h7m1 0h1m1 0h1m1 0h1m6 0h2m2 0h1m4 0h1m1 0h1m1 0h3m1 0h1M2 33.5h1m5 0h1m2 0h1m1 0h2m1 0h1m1 0h2m1 0h2m1 0h4m2 0h1m3 0h2m1 0h1M2 34.5h1m1 0h3m1 0h1m1 0h2m1 0h4m4 0h2m1 0h1m1 0h1m1 0h7m2 0h1M2 35.5h1m1 0h3m1 0h1m1 0h1m1 0h1m8 0h2m9 0h2m1 0h2M2 36.5h1m1 0h3m1 0h1m5 0h3m2 0h1m1 0h1m1 0h1m2 0h4m3 0h2m1 0h3M2 37.5h1m5 0h1m3 0h2m5 0h5m8 0h2m1 0h4M2 38.5h7m3 0h3m2 0h1m2 0h1m2 0h2m1 0h1m3 0h1m3 0h2m2 0h1"/></svg>
+
+  <text x="380" y="902" text-anchor="middle" font-size="34" font-weight="700" fill="#4A3A2E">휴대폰 카메라로 찍어보세요</text>
+  <text x="380" y="950" text-anchor="middle" font-size="23" fill="#7A6A5C">dolbwajwo-doubleusb.vercel.app</text>
+
+  <rect x="230" y="982" width="300" height="52" rx="26" fill="#D96E3C"/>
+  <text x="380" y="1017" text-anchor="middle" font-size="25" font-weight="700" fill="#FFFFFF">가입하면 6,000캐시</text>
+</svg>

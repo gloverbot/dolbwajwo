@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 
 import { getVideoUrl, useApp } from "@/components/AppProvider";
@@ -370,7 +371,16 @@ function SettingsTab() {
         </ul>
       </section>
 
-      <button className="btn-outline mt-6" onClick={() => void logOut()}>
+      {/* 넓은 화면용 소개 홈페이지 (다른 사람에게 서비스를 보여줄 때) */}
+      <Link
+        href="/intro"
+        className="btn-outline mt-6 flex items-center justify-center gap-2"
+      >
+        <Icon name="captive_portal" className="text-2xl" />
+        서비스 소개 홈페이지 보기
+      </Link>
+
+      <button className="btn-outline mt-3" onClick={() => void logOut()}>
         로그아웃
       </button>
 

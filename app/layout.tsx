@@ -1,9 +1,5 @@
 import type { Metadata, Viewport } from "next";
 
-import { AppProvider } from "@/components/AppProvider";
-import { AuthGate } from "@/components/AuthGate";
-import { BottomNav } from "@/components/BottomNav";
-
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -18,7 +14,15 @@ export const viewport: Viewport = {
   themeColor: "#FDF8F1",
 };
 
-/** 모든 화면을 감싸는 바깥 틀입니다. */
+/**
+ * 모든 화면을 감싸는 가장 바깥 틀입니다.
+ *
+ * 여기서는 글꼴만 불러오고 화면 모양은 정하지 않습니다.
+ * 왜냐하면 우리 사이트에는 크기가 다른 두 종류의 화면이 있기 때문입니다.
+ *   - app/(app)  → 휴대폰 크기의 '앱' 화면들 (홈, 채팅, 상점 ...)
+ *   - app/(site) → 넓은 화면의 '소개 홈페이지' (/intro)
+ * 괄호가 붙은 폴더 이름은 주소에 나타나지 않습니다. 모양만 나누는 역할입니다.
+ */
 export default function RootLayout({
   children,
 }: {
@@ -45,16 +49,7 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
         />
       </head>
-      <body>
-        <AppProvider>
-          {/* 휴대폰 화면 크기로 가운데 정렬합니다. */}
-          <div className="mx-auto min-h-screen w-full max-w-md bg-cream pb-28">
-            {/* 로그인 안 한 사람은 여기서 로그인 화면으로 보내집니다 */}
-            <AuthGate>{children}</AuthGate>
-          </div>
-          <BottomNav />
-        </AppProvider>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

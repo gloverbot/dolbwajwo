@@ -109,4 +109,90 @@
   .pick-on {
     @apply border-brand bg-brand text-white shadow-soft;
   }
+
+  /* ══ 소개 홈페이지(/intro) 전용 ═══════════════════════════════════════════
+     앱 화면은 '휴대폰 크기'지만 소개 페이지는 '넓은 화면'이라
+     버튼과 글자 크기를 따로 정해 둡니다.                                   */
+
+  /* 작고 동그란 알약 버튼 (넓은 화면용) */
+  .pill-dark {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-cocoa
+           px-7 py-3.5 text-base font-semibold text-cream transition
+           hover:bg-brand-dark active:scale-[0.98];
+  }
+  .pill-light {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-white
+           px-7 py-3.5 text-base font-semibold text-cocoa shadow-soft transition
+           hover:bg-sand active:scale-[0.98];
+  }
+  .pill-line {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border
+           border-cocoa/25 px-7 py-3.5 text-base font-semibold text-cocoa
+           transition hover:border-cocoa/70 active:scale-[0.98];
+  }
+  .pill-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full
+           border border-white/35 bg-white/10 px-7 py-3.5 text-base
+           font-semibold text-white backdrop-blur transition
+           hover:bg-white/20 active:scale-[0.98];
+  }
+
+  /* 섹션 위에 붙는 아주 작은 제목 (예: AI 매칭) */
+  .eyebrow {
+    @apply text-xs font-bold uppercase tracking-[0.2em] text-mocha;
+  }
+
+  /* 소개 페이지의 큰 제목들 */
+  .site-h1 {
+    @apply text-[2.75rem] font-semibold leading-[1.06] tracking-[-0.035em]
+           sm:text-6xl lg:text-[4.5rem];
+  }
+  .site-h2 {
+    @apply text-[2rem] font-semibold leading-[1.12] tracking-[-0.03em]
+           sm:text-4xl lg:text-5xl;
+  }
+  .site-h3 {
+    @apply text-2xl font-semibold leading-snug tracking-[-0.02em] sm:text-3xl;
+  }
+
+  /* 좌우 여백과 위아래 여백을 넉넉히 (여백이 많을수록 차분해 보입니다) */
+  .site-wrap {
+    @apply mx-auto w-full max-w-[1200px] px-6 sm:px-8 lg:px-10;
+  }
+  .site-section {
+    @apply py-20 sm:py-28 lg:py-36;
+  }
+
+  /* 큰 사진처럼 보이는 둥근 상자 */
+  .site-panel {
+    @apply overflow-hidden rounded-[2rem] sm:rounded-[2.5rem];
+  }
+}
+
+/* ── 옆으로 흐르는 글씨 띠 (마퀴) ──────────────────────────────────────────
+   같은 내용을 두 번 이어 붙인 뒤 절반만큼 밀어서 끊김 없이 반복시킵니다. */
+@keyframes marquee-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-left 46s linear infinite;
+}
+
+.marquee-track.is-reverse {
+  animation-direction: reverse;
+}
+
+/* 움직임을 불편해하는 분들을 위해 애니메이션을 멈춥니다 */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
 }

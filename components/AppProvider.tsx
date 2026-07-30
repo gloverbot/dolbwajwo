@@ -165,6 +165,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [userId, setUserId] = useState<string | null>(null);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
 
+  /**
+   * 캐시가 오가는 동작이 겹치지 않게 막는 잠금장치입니다.
+   *
+   * 버튼을 빠르게 두 번 누르면 요청이 두 개 만들어지고 캐시 계산이 꼬입니다.
+   * 앞의 동작이 끝나기 전에는 다음 동작을 그냥 무시합니다.
+   */
+  const working = useRef(false);
+
   const later = useCallback((fn: () => void, ms: number) => {
     timers.current.push(setTimeout(fn, ms));
   }, []);
@@ -358,8 +366,43 @@ export function AppProvider({ children }: { children: ReactNode }) {
     []
   );
 
+  /**
+   * 캐시를 더하거나 뺍니다. (빼려면 amount에 음수를 넣습니다)
+   *
+   * ⚠️ 여기는 조심해서 고쳐야 하는 곳입니다.
+   *
+   * 예전에는 화면에 있는 값으로 계산해서 '결과값'을 보냈습니다.
+   *   "지금 6,000이니까 3,000으로 바꿔줘"
+   * 이러면 버튼을 빠르게 두 번 눌렀을 때 두 요청이 겹쳐서
+   * 캐시가 한 번만 빠지거나, 반대로 통째로 사라지는 일이 생겼습니다.
+   *
+   * 그래서 이제 '얼마만큼'만 보내고, 계산은 데이터베이스가 직접 합니다.
+   */
   const changeCash = useCallback(
-    async (profileId: string, current: number, amount: number, title: string) => {
+    async (profileId: string, amount: number, title: string) => {
+      // (1) 가장 안전한 방법 - 데이터베이스가 직접 더하고 뺍니다.
+      //     supabase/migrations/0003_change_cash.sql 을 실행하면 이 길로 갑니다.
+      const { error } = await supabase.rpc("change_cash", {
+        p_amount: amount,
+        p_title: title,
+      });
+      if (!error) return;
+
+      // 함수가 아직 없을 때만 아래 대비책으로 내려갑니다.
+      // (그 외의 오류 - 예: 캐시 부족 - 는 여기서 멈춥니다)
+      const missing =
+        error.code === "PGRST202" || /change_cash/.test(error.message ?? "");
+      if (!missing) return;
+
+      // (2) 대비책 - 화면에 있는 값 대신 데이터베이스에서 '방금' 읽은 값으로 계산합니다.
+      const { data: row } = await supabase
+        .from("profiles")
+        .select("cash")
+        .eq("id", profileId)
+        .single();
+      const current = row?.cash ?? 0;
+      if (current + amount < 0) return; // 가진 것보다 많이 쓸 수는 없습니다
+
       await supabase
         .from("profiles")
         .update({ cash: current + amount })
@@ -548,40 +591,46 @@ export function AppProvider({ children }: { children: ReactNode }) {
       const price = durationCash(input.minutes);
       if (data.cash < price) return null;
 
-      const { data: row, error } = await supabase
-        .from("requests")
-        .insert({
-          parent_id: userId,
-          parent_name: me.name,
-          daycare: me.daycare,
-          child_name: child.name,
-          child_age: child.age,
-          child_note: child.note,
-          place: input.place,
-          note: input.note,
-          start_at: input.startAt,
-          minutes: input.minutes,
-        })
-        .select()
-        .single();
+      // 두 번 눌러도 요청은 하나만 만들어지게 합니다.
+      if (working.current) return null;
+      working.current = true;
+      try {
+        const { data: row, error } = await supabase
+          .from("requests")
+          .insert({
+            parent_id: userId,
+            parent_name: me.name,
+            daycare: me.daycare,
+            child_name: child.name,
+            child_age: child.age,
+            child_note: child.note,
+            place: input.place,
+            note: input.note,
+            start_at: input.startAt,
+            minutes: input.minutes,
+          })
+          .select()
+          .single();
 
-      if (error || !row) return null;
+        if (error || !row) return null;
 
-      await changeCash(
-        userId,
-        data.cash,
-        -price,
-        `${child.name} 돌봄 요청 (${formatDuration(input.minutes)})`
-      );
-      await addNotification(
-        userId,
-        "동네 부모님들에게 알림을 보냈어요",
-        `${me.neighborhood} · ${me.daycare} 부모님들에게 전달했습니다.`,
-        `/request/${row.id}`
-      );
+        await changeCash(
+          userId,
+          -price,
+          `${child.name} 돌봄 요청 (${formatDuration(input.minutes)})`
+        );
+        await addNotification(
+          userId,
+          "동네 부모님들에게 알림을 보냈어요",
+          `${me.neighborhood} · ${me.daycare} 부모님들에게 전달했습니다.`,
+          `/request/${row.id}`
+        );
 
-      await refresh(userId);
-      return row.id as string;
+        await refresh(userId);
+        return row.id as string;
+      } finally {
+        working.current = false;
+      }
     },
     [me, userId, data.cash, changeCash, addNotification, refresh]
   );
@@ -647,6 +696,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
       const target = data.requests.find((r) => r.id === id);
       if (!target || target.status !== "accepted") return;
 
+      // 두 번 눌러도 캐시가 두 번 들어오지 않게 막습니다.
+      if (working.current) return;
+      working.current = true;
+      try {
       await supabase.from("requests").update({ status: "done" }).eq("id", id);
       // 돌봄이 끝나면 그 요청으로 만들어졌던 채팅방을 정리합니다.
       await supabase.from("rooms").delete().eq("request_id", id);
@@ -657,7 +710,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
       if (iWasHelper) {
         await changeCash(
           userId,
-          data.cash,
           price,
           `${target.childName} 돌봄 완료 (${formatDuration(target.minutes)})`
         );
@@ -683,9 +735,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
         `/request/${id}`
       );
 
-      await refresh(userId);
+        await refresh(userId);
+      } finally {
+        working.current = false;
+      }
     },
-    [me, userId, data.requests, data.cash, changeCash, addNotification, refresh]
+    [me, userId, data.requests, changeCash, addNotification, refresh]
   );
 
   // -------------------------------------------------------------------------
@@ -703,13 +758,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
       await changeCash(
         userId,
-        data.cash,
         durationCash(target.minutes),
         `${target.childName} 요청 취소 (환불)`
       );
       await refresh(userId);
     },
-    [userId, data.requests, data.cash, changeCash, refresh]
+    [userId, data.requests, changeCash, refresh]
   );
 
   // -------------------------------------------------------------------------
@@ -787,9 +841,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
   // -------------------------------------------------------------------------
   const watchAd = useCallback(async () => {
     if (!userId) return;
-    await changeCash(userId, data.cash, AD_REWARD, "광고 시청 보상");
-    await refresh(userId);
-  }, [userId, data.cash, changeCash, refresh]);
+    // 두 번 눌러도 한 번만 받도록 막습니다.
+    if (working.current) return;
+    working.current = true;
+    try {
+      await changeCash(userId, AD_REWARD, "광고 시청 보상");
+      await refresh(userId);
+    } finally {
+      working.current = false;
+    }
+  }, [userId, changeCash, refresh]);
 
   // -------------------------------------------------------------------------
   // 10) 기프티콘 사기
@@ -799,27 +860,29 @@ export function AppProvider({ children }: { children: ReactNode }) {
       if (!userId) return false;
       if (data.cash < item.price) return false;
 
-      await supabase.from("coupons").insert({
-        profile_id: userId,
-        gifticon_id: item.id,
-        name: item.name,
-        brand: item.brand,
-        code: makeCouponCode(),
-      });
-      await changeCash(
-        userId,
-        data.cash,
-        -item.price,
-        `${item.brand} ${item.name} 교환`
-      );
-      await addNotification(
-        userId,
-        "기프티콘을 받았어요",
-        `${item.brand} ${item.name} 교환 번호가 발급됐어요.`,
-        "/store"
-      );
-      await refresh(userId);
-      return true;
+      // 두 번 눌러도 하나만 사지도록 막습니다.
+      if (working.current) return false;
+      working.current = true;
+      try {
+        await supabase.from("coupons").insert({
+          profile_id: userId,
+          gifticon_id: item.id,
+          name: item.name,
+          brand: item.brand,
+          code: makeCouponCode(),
+        });
+        await changeCash(userId, -item.price, `${item.brand} ${item.name} 교환`);
+        await addNotification(
+          userId,
+          "기프티콘을 받았어요",
+          `${item.brand} ${item.name} 교환 번호가 발급됐어요.`,
+          "/store"
+        );
+        await refresh(userId);
+        return true;
+      } finally {
+        working.current = false;
+      }
     },
     [userId, data.cash, changeCash, addNotification, refresh]
   );

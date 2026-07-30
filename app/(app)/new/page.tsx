@@ -37,6 +37,8 @@ export default function NewRequestPage() {
   const [place, setPlace] = useState("");
   const [note, setNote] = useState("");
   const [error, setError] = useState("");
+  // 보내는 중인지 (버튼을 잠그고 글씨를 바꿔서 두 번 누르지 않게 합니다)
+  const [sending, setSending] = useState(false);
 
   if (!me) return null;
 
@@ -69,6 +71,10 @@ export default function NewRequestPage() {
       setError("어디서 만날지 적어주세요.");
       return;
     }
+    // 이미 보내는 중이면 아무것도 하지 않습니다.
+    // (두 번 누르면 요청이 두 개 만들어지고 캐시가 두 번 빠집니다)
+    if (sending) return;
+    setSending(true);
 
     const id = await createRequest({
       childId: child.id,
@@ -79,11 +85,13 @@ export default function NewRequestPage() {
     });
 
     if (!id) {
+      setSending(false);
       setError(
         "캐시가 부족해요. 이웃 아이를 돌봐주거나 광고를 보면 모을 수 있어요."
       );
       return;
     }
+    // 성공하면 곧바로 화면이 넘어가므로 sending은 그대로 둡니다.
     router.push(`/request/${id}`);
   }
 
@@ -251,10 +259,14 @@ export default function NewRequestPage() {
         <button
           className="btn-primary mt-5 flex items-center justify-center gap-2"
           onClick={() => void handleSubmit()}
-          disabled={notEnoughCash}
+          disabled={notEnoughCash || sending}
         >
-          <Icon name="send" filled className="text-2xl" />
-          동네 부모님께 알림 보내기
+          <Icon
+            name={sending ? "hourglass_top" : "send"}
+            filled
+            className="text-2xl"
+          />
+          {sending ? "보내는 중이에요..." : "동네 부모님께 알림 보내기"}
         </button>
 
         <div className="mt-6">
